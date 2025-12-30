@@ -5,6 +5,8 @@
     gap: 4rem;
     padding-bottom: 5rem;
     background-color: var(--bg-body);
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
 }
 
 /* Hero Section */
@@ -410,9 +412,11 @@
 /* Responsive */
 @media (max-width: 640px) {
     .hero-section {
-        padding: 5rem 1.25rem 4rem;
-        /* Add horizontal padding */
+        padding: 5rem 0.75rem 4rem;
+        /* Reduced padding to prevent overflow */
         min-height: 500px;
+        overflow-x: hidden;
+        /* Prevent horizontal scroll */
     }
 
     /* Hide background image text on mobile by reducing opacity */
@@ -439,23 +443,30 @@
     .hero-buttons {
         flex-direction: column;
         width: 100%;
-        padding: 0 0.5rem;
-        /* Extra padding for buttons */
+        max-width: 100%;
+        padding: 0;
+        /* No extra padding to prevent overflow */
     }
 
     .hero-buttons a {
         width: 100%;
+        max-width: 100%;
     }
 
     .hero-buttons .btn {
         width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        /* Ensure padding is included in width */
     }
 
     .search-widget {
-        max-width: 100%;
+        max-width: calc(100% - 1rem);
+        /* Account for container padding */
         margin: 0 auto;
-        padding: 0 0.5rem;
-        /* Prevent edge cutoff */
+        padding: 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     /* Fix Quick Rate Check Form - Make 1 column on mobile */
@@ -508,16 +519,37 @@
     .hero-trust-bar {
         margin-top: 2rem;
         padding-top: 1.5rem;
+        max-width: 100%;
+        overflow-x: auto;
+        /* Allow horizontal scroll for trust bar */
     }
 
     .trust-bar-companies {
         gap: 0.75rem;
         font-size: 0.75rem;
+        padding-bottom: 0.5rem;
+        /* Space for scrollbar */
     }
 
     .trust-bar-companies span {
         font-size: 0.75rem;
         padding: 0.5rem 0.75rem;
+    }
+
+    /* Ensure all hero content fits within screen */
+    .hero-content-wrapper {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        box-sizing: border-box;
+    }
+
+    .hero-text {
+        max-width: 100%;
+    }
+
+    .hero-description {
+        max-width: 100%;
+        padding: 0 0.5rem;
     }
 }
 
