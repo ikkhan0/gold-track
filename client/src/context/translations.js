@@ -1,0 +1,30 @@
+export const translations = {
+    en: {
+        'nav.home': 'Home',
+        'nav.login': 'Login',
+        'nav.register': 'Register',
+        'nav.dashboard': 'Dashboard',
+        'hero.title': 'Find Loads, Get Paid, Drive More',
+        'hero.subtitle': 'Pakistan\'s #1 Load Board for Carriers and Shippers',
+        'btn.findTruck': 'Find a Truck',
+        'btn.findLoad': 'Find a Load',
+        'common.loading': 'Loading...',
+        'auth.welcome': 'Welcome Back',
+        'role.carrier': 'I am a Carrier',
+        'role.shipper': 'I am a Shipper/Broker',
+    },
+    ur: {
+        'nav.home': 'ہوم',
+        'nav.login': 'لاگ ان',
+        'nav.register': 'رجسٹر',
+        'nav.dashboard': 'ڈیش بورڈ',
+        'hero.title': 'لوڈ ڈھونڈیں، کمائیں، اور چلائیں',
+        'hero.subtitle': 'پاکستان کا نمبر 1 لوڈ بورڈ برائے کیریئرز اور شپرز',
+        'btn.findTruck': 'گاڑی ڈھونڈیں',
+        'btn.findLoad': 'لوڈ ڈھونڈیں',
+        'common.loading': 'لوڈنگ...',
+        'auth.welcome': 'خوش آمدید',
+        'role.carrier': 'میں کیریئر ہوں',
+        'role.shipper': 'میں شپر/بروکر ہوں',
+    }
+};

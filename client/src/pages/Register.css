@@ -1,0 +1,163 @@
+/* Register Page Styles */
+.register-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 48rem;
+    padding: 2.5rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.register-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.register-subtitle {
+    color: var(--text-body);
+    font-size: 1rem;
+}
+
+.register-success {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--primary-gold);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    text-align: center;
+}
+
+.success-icon {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1.5rem;
+    color: var(--primary-gold);
+}
+
+.success-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: white;
+}
+
+.success-message {
+    color: var(--text-body);
+    margin-bottom: 1.5rem;
+}
+
+.role-selector {
+    display: flex;
+    gap: 0.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.25rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 2.5rem;
+}
+
+.role-button {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    color: var(--text-body);
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.role-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.role-button.active {
+    background: var(--primary-gold);
+    color: black;
+    box-shadow: var(--shadow-sm);
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.form-checkbox-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.form-checkbox {
+    margin-top: 0.25rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.form-checkbox-label {
+    color: var(--text-body);
+    line-height: 1.5;
+}
+
+.form-checkbox-label a {
+    color: var(--primary-gold);
+    text-decoration: underline;
+}
+
+.form-checkbox-label a:hover {
+    color: var(--primary-gold-hover);
+}
+
+.register-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-body);
+}
+
+.register-footer a {
+    color: var(--primary-gold);
+    font-weight: 700;
+}
+
+.register-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .register-card {
+        padding: 1.5rem;
+    }
+}

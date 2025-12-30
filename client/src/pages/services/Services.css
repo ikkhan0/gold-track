@@ -1,0 +1,135 @@
+/* Services Page Global Styles - Applied to all service pages */
+
+/* Hero Section */
+.service-hero {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.service-hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.service-hero p {
+    font-size: 1.25rem;
+    color: var(--text-body);
+    max-width: 42rem;
+    margin: 0 auto;
+}
+
+/* Features Grid - Already handled by global .card but adding helper */
+.service-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+/* Pricing Tables */
+.service-pricing-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 1rem;
+}
+
+.service-pricing-info h4 {
+    color: white;
+    fontWeight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.service-pricing-info p {
+    color: var(--text-body);
+    font-size: 0.875rem;
+}
+
+.service-pricing-price {
+    color: var(--primary-gold);
+    font-weight: 700;
+    font-size: 1.125rem;
+    white-space: nowrap;
+}
+
+/* CTA Section */
+.service-cta {
+    text-align: center;
+    padding: 3rem;
+    background: rgba(212, 175, 55, 0.05);
+    border-radius: 1rem;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.service-cta h3 {
+    color: white;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.service-cta p {
+    color: var(--text-body);
+    margin-bottom: 2rem;
+}
+
+.service-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+    .service-hero h1 {
+        font-size: 2rem;
+    }
+
+    .service-hero p {
+        font-size: 1rem;
+    }
+
+    .service-pricing-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.25rem;
+    }
+
+    .service-pricing-price {
+        align-self: flex-end;
+    }
+
+    .service-cta {
+        padding: 2rem 1.5rem;
+    }
+
+    .service-cta h3 {
+        font-size: 1.5rem;
+    }
+
+    .service-cta-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .service-cta-buttons a {
+        width: 100%;
+    }
+
+    .service-cta-buttons button {
+        width: 100%;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    .service-hero h1 {
+        font-size: 2.5rem;
+    }
+}
