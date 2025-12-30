@@ -417,14 +417,14 @@
 
     /* Hide background image text on mobile by reducing opacity */
     .hero-bg img {
-        opacity: 0.2 !important;
-        /* Reduced from 0.5 to hide text completely */
+        opacity: 0.4 !important;
+        /* Balanced opacity - hides text while keeping background visible */
     }
 
-    /* Strengthen gradient overlay on mobile */
+    /* Balanced gradient overlay on mobile */
     .hero-gradient-main {
-        background: linear-gradient(to right, #0F1111 0%, rgba(15, 17, 17, 0.98) 40%, rgba(15, 17, 17, 0.95) 100%) !important;
-        /* Increased opacity values */
+        background: linear-gradient(to right, #0F1111 0%, rgba(15, 17, 17, 0.85) 40%, rgba(15, 17, 17, 0.75) 100%) !important;
+        /* Balanced to show background while hiding text */
     }
 
     .hero-title {
