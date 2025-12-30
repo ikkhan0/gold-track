@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://gold-track-flax.vercel.app/sitemap.xml
+
+# Disallow admin/dashboard pages (for future backend)
+Disallow: /admin/
+Disallow: /dashboard/
+
+# Allow all other pages
+Allow: /
+Allow: /loadboard
+Allow: /services
+Allow: /how-it-works
+Allow: /contact
+Allow: /register
+Allow: /login
