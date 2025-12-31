@@ -208,28 +208,22 @@ app.get('/debug/db', async (req, res) => {
 
         console.log('📊 Connection status:', readyStateMap[ready]);
 
-        // Lazy-load User model to avoid circular dependencies
+        // Try to count users
         const User = require('../server/models/User');
-        const count = await User.countDocuments();
-        const oneUser = await User.findOne({}, { email: 1, role: 1, status: 1 }).lean();
+        const userCount = await User.countDocuments();
 
-        const debugInfo = {
-            success: true,
-            readyState: ready,
-            readyStateDesc: readyStateMap[ready] || 'unknown',
+        res.json({
+            status: 'success',
+            connectionState: readyStateMap[ready],
             database: dbName,
-            userCount: count,
-            sampleUser: oneUser,
+            userCount,
             timestamp: new Date().toISOString(),
             environment: {
                 hasMongoUri: !!process.env.MONGO_URI,
                 hasJwtSecret: !!process.env.JWT_SECRET,
                 nodeEnv: process.env.NODE_ENV
             }
-        };
-
-        console.log('✅ Debug check successful:', debugInfo);
-        res.json(debugInfo);
+        });
     } catch (err) {
         console.error('❌ Debug /debug/db error:', {
             message: err.message,
@@ -241,6 +235,30 @@ app.get('/debug/db', async (req, res) => {
             error: err.message,
             timestamp: new Date().toISOString()
         });
+    }
+});
+
+// Debug endpoint to check MONGO_URI parameters (password hidden)
+app.get('/api/debug/uri', (req, res) => {
+    try {
+        const mongoUri = process.env.MONGO_URI;
+        if (!mongoUri) {
+            return res.json({ error: 'MONGO_URI not set' });
+        }
+
+        // Hide password but show all parameters
+        const sanitized = mongoUri.replace(/:([^@]+)@/, ':***@');
+        const hasDirectConnection = mongoUri.includes('directConnection');
+        const directConnectionValue = mongoUri.match(/directConnection=(true|false)/)?.[1] || 'not set';
+
+        res.json({
+            sanitizedUri: sanitized,
+            hasDirectConnection,
+            directConnectionValue,
+            uriLength: mongoUri.length
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 
@@ -279,4 +297,3 @@ module.exports = async (req, res) => {
         });
     }
 };
-```
