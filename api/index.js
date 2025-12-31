@@ -1,10 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
-// Disable mongoose buffering for serverless
-mongoose.set('bufferCommands', false);
-mongoose.set('bufferTimeoutMS', 10000);
+const connectDB = require('./db');
 
 // Create Express app
 const app = express();
@@ -17,118 +14,16 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// MongoDB Connection Management for Serverless
-let cachedDb = null;
-let connectionPromise = null;
-let lastConnectionAttempt = 0;
-const CONNECTION_TIMEOUT = 30000; // 30 seconds
-
+// Simple database connection wrapper
 async function connectToDatabase() {
-    const mongoUri = process.env.MONGO_URI;
     const jwtSecret = process.env.JWT_SECRET;
-
-    console.log('🔍 Environment check:', {
-        hasMongoUri: !!mongoUri,
-        hasJwtSecret: !!jwtSecret,
-        mongoUriPrefix: mongoUri ? mongoUri.substring(0, 20) + '...' : 'MISSING',
-        nodeEnv: process.env.NODE_ENV,
-        currentReadyState: mongoose.connection.readyState,
-        readyStateDesc: ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState] || 'unknown'
-    });
-
-    // Validate environment variables
-    if (!mongoUri) {
-        const error = new Error('MONGO_URI environment variable is not set in Vercel');
-        console.error('❌ Configuration Error:', error.message);
-        throw error;
-    }
 
     if (!jwtSecret) {
         console.warn('⚠️  JWT_SECRET not set - authentication will fail');
     }
 
-    // Check if already connected
-    if (mongoose.connection.readyState === 1) {
-        console.log('✅ Using existing MongoDB connection');
-        return mongoose.connection;
-    }
-
-    // Check if currently connecting
-    if (mongoose.connection.readyState === 2) {
-        console.log('⏳ MongoDB connection in progress, waiting...');
-        if (connectionPromise) {
-            return await connectionPromise;
-        }
-    }
-
-    // Prevent too frequent connection attempts
-    const now = Date.now();
-    if (connectionPromise && (now - lastConnectionAttempt) < 5000) {
-        console.log('🔄 Reusing pending connection attempt');
-        return await connectionPromise;
-    }
-
-    // Create new connection
-    lastConnectionAttempt = now;
-    console.log('🔌 Initiating new MongoDB connection...');
-
-    // Clean the URI: remove directConnection parameter if present
-    let cleanUri = mongoUri;
-    console.log('📋 Original URI contains directConnection?', mongoUri.includes('directConnection'));
-
-    if (mongoUri.includes('directConnection=true')) {
-        cleanUri = mongoUri.replace(/[&?]directConnection=true/gi, '');
-        console.log('⚠️  Removed directConnection=true from URI');
-    }
-    if (mongoUri.includes('directConnection=false')) {
-        cleanUri = mongoUri.replace(/[&?]directConnection=false/gi, '');
-        console.log('⚠️  Removed directConnection=false from URI');
-    }
-
-    console.log('📋 Cleaned URI contains directConnection?', cleanUri.includes('directConnection'));
-    connectionPromise = mongoose.connect(cleanUri, {
-        serverSelectionTimeoutMS: CONNECTION_TIMEOUT,
-        connectTimeoutMS: CONNECTION_TIMEOUT,
-        socketTimeoutMS: 45000,
-        maxPoolSize: 10,
-        minPoolSize: 1,
-        bufferCommands: false,
-        autoIndex: false,
-    })
-        .then(async (mongooseInstance) => {
-            console.log('🔗 MongoDB connection established');
-
-            // Verify connection with ping
-            try {
-                await mongooseInstance.connection.db.admin().ping();
-                console.log('✅ MongoDB Connected & Verified (Ping successful)');
-                console.log('📊 Connected to database:', mongooseInstance.connection.name);
-                cachedDb = mongooseInstance.connection;
-                return mongooseInstance.connection;
-            } catch (pingError) {
-                console.error('❌ MongoDB ping failed:', pingError.message);
-                throw pingError;
-            }
-        })
-        .catch(err => {
-            console.error('❌ MongoDB Connection Error Details:', {
-                message: err.message,
-                code: err.code,
-                name: err.name,
-                stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
-            });
-
-            // Reset connection promise to allow retry
-            connectionPromise = null;
-            cachedDb = null;
-
-            // Throw detailed error
-            const detailedError = new Error(`MongoDB connection failed: ${err.message}`);
-            detailedError.originalError = err;
-            throw detailedError;
-        });
-
-    return await connectionPromise;
+    // Use the clean connection module
+    return await connectDB();
 }
 
 // Load routes
