@@ -119,4 +119,4 @@ laneRateSchema.statics.calculateLaneRate = async function (origin, destination, 
     };
 };
 
-module.exports = mongoose.model('LaneRate', laneRateSchema);
+module.exports = mongoose.models.LaneRate || mongoose.model('LaneRate', laneRateSchema);

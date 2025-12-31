@@ -51,4 +51,4 @@ messageSchema.statics.generateConversationId = function (userId1, userId2) {
     return ids.join('_');
 };
 
-module.exports = mongoose.model('Message', messageSchema);
+module.exports = mongoose.models.Message || mongoose.model('Message', messageSchema);

@@ -53,4 +53,4 @@ savedSearchSchema.pre('save', function (next) {
     next();
 });
 
-module.exports = mongoose.model('SavedSearch', savedSearchSchema);
+module.exports = mongoose.models.SavedSearch || mongoose.model('SavedSearch', savedSearchSchema);

@@ -33,4 +33,4 @@ cmsContentSchema.pre('save', function (next) {
     next();
 });
 
-module.exports = mongoose.model('CMSContent', cmsContentSchema);
+module.exports = mongoose.models.CMSContent || mongoose.model('CMSContent', cmsContentSchema);

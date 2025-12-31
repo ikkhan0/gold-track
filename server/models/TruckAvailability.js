@@ -277,4 +277,4 @@ truckAvailabilitySchema.methods.recordContact = function () {
     return this.save();
 };
 
-module.exports = mongoose.model('TruckAvailability', truckAvailabilitySchema);
+module.exports = mongoose.models.TruckAvailability || mongoose.model('TruckAvailability', truckAvailabilitySchema);

@@ -61,15 +61,15 @@ const loadSchema = new mongoose.Schema({
     contactMobile: { type: String, required: true }, // Direct mobile number for this load
     contactWhatsApp: { type: String }, // Optional WhatsApp number if different
     showContactImmediately: { type: Boolean, default: false }, // If true, shows contact without click
-    
+
     // ANALYTICS & TRACKING
     viewCount: { type: Number, default: 0 }, // How many times load was viewed
     contactViewCount: { type: Number, default: 0 }, // How many times "Show Contact" was clicked
-    viewedBy: [{ 
+    viewedBy: [{
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         viewedAt: { type: Date, default: Date.now }
     }],
-    contactClickedBy: [{ 
+    contactClickedBy: [{
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         clickedAt: { type: Date, default: Date.now }
     }],
@@ -88,7 +88,7 @@ const loadSchema = new mongoose.Schema({
 });
 
 // Methods for tracking
-loadSchema.methods.recordView = function(userId) {
+loadSchema.methods.recordView = function (userId) {
     this.viewCount += 1;
     if (userId && !this.viewedBy.some(v => v.user.toString() === userId.toString())) {
         this.viewedBy.push({ user: userId });
@@ -96,7 +96,7 @@ loadSchema.methods.recordView = function(userId) {
     return this.save();
 };
 
-loadSchema.methods.recordContactClick = function(userId) {
+loadSchema.methods.recordContactClick = function (userId) {
     this.contactViewCount += 1;
     if (userId && !this.contactClickedBy.some(c => c.user.toString() === userId.toString())) {
         this.contactClickedBy.push({ user: userId });
@@ -111,4 +111,4 @@ loadSchema.index({ 'bids.carrier': 1 });
 loadSchema.index({ createdAt: -1 }); // For sorting by newest
 loadSchema.index({ expiresAt: 1 }); // For TTL cleanup
 
-module.exports = mongoose.model('Load', loadSchema);
+module.exports = mongoose.models.Load || mongoose.model('Load', loadSchema);

@@ -17,13 +17,13 @@ const userSchema = new mongoose.Schema({
     fleetType: { type: String },
     cnic: { type: String },
     licenseNumber: { type: String },
-    
+
     // DAT-Style Trust Metrics
     creditScore: { type: Number, default: 50, min: 0, max: 100 }, // CS in DAT
     daysToPayAverage: { type: Number, default: 30 }, // DTP (Days To Pay)
     rating: { type: Number, default: 0 }, // User rating
     reviewCount: { type: Number, default: 0 },
-    
+
     // Verification & Badges
     isVerified: { type: Boolean, default: false }, // CNIC/License verified by admin
     verificationBadges: [{ type: String }], // ['Gold', 'Premium', 'Verified']
@@ -33,11 +33,11 @@ const userSchema = new mongoose.Schema({
     // Shipper Specific
     companyName: { type: String },
     ntn: { type: String },
-    
+
     // Fleet Owner Specific
     totalTrucks: { type: Number, default: 0 },
     drivers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Assigned drivers
-    
+
     // Subscription & Premium Features
     subscriptionTier: { type: String, enum: ['Free', 'Gold', 'Premium'], default: 'Free' },
     subscriptionExpiresAt: { type: Date },
@@ -47,10 +47,12 @@ const userSchema = new mongoose.Schema({
 });
 
 // Method to check if user has Gold/Premium access
-userSchema.methods.hasPremiumAccess = function() {
+userSchema.methods.hasPremiumAccess = function () {
     if (this.subscriptionTier === 'Free') return false;
     if (!this.subscriptionExpiresAt) return false;
     return this.subscriptionExpiresAt > new Date();
 };
 
-module.exports = mongoose.model('User', userSchema);
+// Export model with serverless-safe registration
+module.exports = mongoose.models.User || mongoose.model('User', userSchema);
+

@@ -71,4 +71,4 @@ const documentSchema = new mongoose.Schema({
 documentSchema.index({ owner: 1, ownerModel: 1 });
 documentSchema.index({ verificationStatus: 1 });
 
-module.exports = mongoose.model('Document', documentSchema);
+module.exports = mongoose.models.Document || mongoose.model('Document', documentSchema);
