@@ -7,16 +7,25 @@ let cachedDb = null;
 
 async function connectToDatabase() {
     if (cachedDb && mongoose.connection.readyState === 1) {
+        console.log('Using cached MongoDB connection');
         return cachedDb;
     }
 
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        const mongoUri = process.env.MONGO_URI;
+        
+        if (!mongoUri) {
+            throw new Error('MONGO_URI environment variable is not set');
+        }
+
+        console.log('Connecting to MongoDB...');
+        await mongoose.connect(mongoUri);
+        
         cachedDb = mongoose.connection;
-        console.log('MongoDB Connected');
+        console.log('MongoDB Connected Successfully');
         return cachedDb;
     } catch (error) {
-        console.error('MongoDB Connection Error:', error);
+        console.error('MongoDB Connection Error:', error.message);
         throw error;
     }
 }
