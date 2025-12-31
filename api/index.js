@@ -17,74 +17,53 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Connect to MongoDB
-let isConnected = false;
+// Connect to MongoDB (cached)
+let cachedConnectionPromise = null;
 
 async function connectToDatabase() {
-    if (isConnected && mongoose.connection.readyState === 1) {
-        console.log('Using existing MongoDB connection');
-        return;
+    const mongoUri = process.env.MONGO_URI;
+    const jwtSecret = process.env.JWT_SECRET;
+
+    console.log('Environment check:', {
+        hasMongoUri: !!mongoUri,
+        hasJwtSecret: !!jwtSecret,
+        nodeEnv: process.env.NODE_ENV,
+        readyState: mongoose.connection.readyState
+    });
+
+    if (!mongoUri) {
+        throw new Error('MONGO_URI environment variable is not set');
     }
 
-    try {
-        const mongoUri = process.env.MONGO_URI;
-        const jwtSecret = process.env.JWT_SECRET;
-        
-        console.log('Environment check:', {
-            hasMongoUri: !!mongoUri,
-            hasJwtSecret: !!jwtSecret,
-            nodeEnv: process.env.NODE_ENV
+    if (mongoose.connection.readyState === 1) {
+        return mongoose.connection;
+    }
+
+    if (!cachedConnectionPromise) {
+        console.log('Attempting fresh MongoDB connection...');
+        cachedConnectionPromise = mongoose.connect(mongoUri, {
+            serverSelectionTimeoutMS: 10000,
+            connectTimeoutMS: 10000,
+            socketTimeoutMS: 45000,
+            family: 4,
+            retryWrites: true,
+            w: 'majority',
+            maxPoolSize: 1,
+            minPoolSize: 1,
+            bufferCommands: false
+        }).then(async (conn) => {
+            // Explicit ping to verify connectivity
+            await conn.connection.db.admin().command({ ping: 1 });
+            console.log('✅ MongoDB Connected & Pinged');
+            return conn;
+        }).catch(err => {
+            console.error('❌ MongoDB connection failure:', err);
+            cachedConnectionPromise = null;
+            throw err;
         });
-        
-        if (!mongoUri) {
-            throw new Error('MONGO_URI environment variable is not set');
-        }
-
-        console.log('Attempting to connect to MongoDB...');
-        
-        // Disconnect if connection is in a bad state
-        if (mongoose.connection.readyState !== 0 && mongoose.connection.readyState !== 1) {
-            await mongoose.disconnect();
-        }
-        
-        // Only connect if not already connected
-        if (mongoose.connection.readyState === 0) {
-            await mongoose.connect(mongoUri, {
-                serverSelectionTimeoutMS: 5000,
-                connectTimeoutMS: 10000,
-                socketTimeoutMS: 45000,
-                family: 4,
-                retryWrites: true,
-                w: 'majority',
-                maxPoolSize: 1, // Reduce pool size for serverless
-                minPoolSize: 1,
-                bufferCommands: false // Disable buffering
-            });
-        }
-        
-        // Wait for connection to be ready
-        if (mongoose.connection.readyState === 2) { // connecting
-            await new Promise((resolve, reject) => {
-                const timeout = setTimeout(() => reject(new Error('Connection timeout')), 10000);
-                mongoose.connection.once('connected', () => {
-                    clearTimeout(timeout);
-                    resolve();
-                });
-                mongoose.connection.once('error', (err) => {
-                    clearTimeout(timeout);
-                    reject(err);
-                });
-            });
-        }
-        
-        isConnected = true;
-        console.log('✅ MongoDB Connected Successfully, readyState:', mongoose.connection.readyState);
-    } catch (error) {
-        isConnected = false;
-        console.error('❌ MongoDB Connection Error:', error.message);
-        console.error('Full error:', error);
-        throw error;
     }
+
+    return cachedConnectionPromise;
 }
 
 // Load routes
@@ -155,6 +134,7 @@ app.get('/', (req, res) => {
 // Debug route to verify DB queries
 app.get('/debug/db', async (req, res) => {
     try {
+        await connectToDatabase();
         const ready = mongoose.connection.readyState;
         const dbName = mongoose.connection.name;
         // Lazy-load User model to avoid circular load
