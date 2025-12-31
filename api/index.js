@@ -2,6 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+// Disable mongoose buffering for serverless
+mongoose.set('bufferCommands', false);
+mongoose.set('bufferTimeoutMS', 10000);
+
 // Create Express app
 const app = express();
 
@@ -49,11 +53,12 @@ async function connectToDatabase() {
                 serverSelectionTimeoutMS: 5000,
                 connectTimeoutMS: 10000,
                 socketTimeoutMS: 45000,
-                family: 4, // Use IPv4, skip trying IPv6
+                family: 4,
                 retryWrites: true,
                 w: 'majority',
-                maxPoolSize: 10,
-                minPoolSize: 1
+                maxPoolSize: 1, // Reduce pool size for serverless
+                minPoolSize: 1,
+                bufferCommands: false // Disable buffering
             });
         }
         
