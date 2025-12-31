@@ -8,7 +8,7 @@ router.get('/stats', protect, async (req, res) => {
     try {
         const stats = {};
 
-        if (req.user.role === 'carrier') {
+        if (req.user.role === 'carrier' || req.user.role === 'owner_operator' || req.user.role === 'fleet_owner') {
             const myTrucks = await Vehicle.countDocuments({ owner: req.user.id });
             const myBids = await Load.find({ 'bids.carrier': req.user.id });
 
@@ -22,31 +22,24 @@ router.get('/stats', protect, async (req, res) => {
                 if (winningBid) totalEarnings += winningBid.amount;
             });
 
-            stats.title1 = 'Active Jobs';
-            stats.value1 = activeLoads;
-            stats.title2 = 'My Trucks';
-            stats.value2 = myTrucks;
-            stats.title3 = 'Pending Bids';
-            stats.value3 = pendingBids;
-            stats.title4 = 'Proj. Earnings';
-            stats.value4 = `Rs ${totalEarnings.toLocaleString()}`;
+            stats.activeJobs = activeLoads;
+            stats.myTrucks = myTrucks;
+            stats.pendingBids = pendingBids;
+            stats.totalEarnings = totalEarnings;
         } else {
-            // Shipper
+            // Shipper or Broker
             const myLoads = await Load.find({ shipper: req.user.id });
             const activePostings = myLoads.filter(l => l.status === 'Open').length;
+            const inProgress = myLoads.filter(l => l.status === 'In-Transit').length;
             const totalPostings = myLoads.length;
 
             let totalBidsReceived = 0;
-            myLoads.forEach(l => totalBidsReceived += l.bids.length);
+            myLoads.forEach(l => totalBidsReceived += (l.bids?.length || 0));
 
-            stats.title1 = 'Active Postings';
-            stats.value1 = activePostings;
-            stats.title2 = 'Total Posted';
-            stats.value2 = totalPostings;
-            stats.title3 = 'Bids Received';
-            stats.value3 = totalBidsReceived;
-            stats.title4 = 'Total Spent';
-            stats.value4 = 'Rs 0'; // Placeholder
+            stats.activePostings = activePostings;
+            stats.inProgress = inProgress;
+            stats.bidsReceived = totalBidsReceived;
+            stats.totalSpent = 0; // Placeholder
         }
 
         res.json(stats);

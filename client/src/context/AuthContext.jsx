@@ -19,16 +19,20 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         const { data } = await api.post('/auth/login', { email, password });
         localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data));
-        setUser(data);
+        // Backend returns { user: {...}, token, _id, name, email, role }
+        // Store the nested user object which has the role
+        const userObj = data.user || data;
+        localStorage.setItem('user', JSON.stringify(userObj));
+        setUser(userObj);
         return data;
     };
 
     const register = async (userData) => {
         const { data } = await api.post('/auth/register', userData);
         localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data));
-        setUser(data);
+        const userObj = data.user || data;
+        localStorage.setItem('user', JSON.stringify(userObj));
+        setUser(userObj);
         return data;
     };
 

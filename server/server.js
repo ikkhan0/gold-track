@@ -25,16 +25,39 @@ app.get('/', (req, res) => {
 const authRoutes = require('./routes/auth');
 const loadRoutes = require('./routes/loads');
 const vehicleRoutes = require('./routes/vehicles');
-const vehicleRoutes = require('./routes/vehicles');
 const dashboardRoutes = require('./routes/dashboard');
 const adminRoutes = require('./routes/admin');
+const truckRoutes = require('./routes/trucks');
+const messageRoutes = require('./routes/messages');
+const notificationRoutes = require('./routes/notifications');
+const reviewRoutes = require('./routes/reviews');
+const documentRoutes = require('./routes/documents');
+const rateRoutes = require('./routes/rates');
+const analyticsRoutes = require('./routes/analytics');
+const trackingRoutes = require('./routes/tracking');
+const searchRoutes = require('./routes/searches');
+const userRoutes = require('./routes/users');
+const staticDataRoutes = require('./routes/staticData');
+const settingsRoutes = require('./routes/settings');
 
+// Mount Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/loads', loadRoutes);
 app.use('/api/vehicles', vehicleRoutes);
-app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/trucks', truckRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/documents', documentRoutes);
+app.use('/api/rates', rateRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/tracking', trackingRoutes);
+app.use('/api/searches', searchRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/static-data', staticDataRoutes);
+app.use('/api/settings', settingsRoutes);
 
 
 const PORT = process.env.PORT || 5000;

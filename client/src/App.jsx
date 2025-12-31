@@ -13,17 +13,30 @@ import DashboardHome from './pages/dashboard/DashboardHome';
 import VehicleManager from './pages/dashboard/VehicleManager';
 import FindLoads from './pages/dashboard/FindLoads';
 import PostLoad from './pages/dashboard/PostLoad';
+import PostTruck from './pages/dashboard/carrier/PostTruck';
+import MyTruckPostings from './pages/dashboard/carrier/MyTruckPostings';
+import FindTrucks from './pages/dashboard/shipper/FindTrucks';
 import MyPostings from './pages/dashboard/MyPostings';
 import MyLoads from './pages/dashboard/MyLoads';
 import HowItWorks from './pages/HowItWorks';
 import Services from './pages/Services';
 import MarketRates from './pages/MarketRates';
-import AdminDashboard from './pages/admin/AdminDashboard';
 import Contact from './pages/Contact';
 import Help from './pages/Help';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Loadboard from './pages/Loadboard';
+
+// Admin Pages
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import SuperAdminDashboard from './pages/admin/SuperAdminDashboard';
+import UserManagement from './pages/admin/UserManagement';
+import LoadManagement from './pages/admin/LoadManagement';
+import TruckManagement from './pages/admin/TruckManagement';
+import CMSManagement from './pages/admin/CMSManagement';
+import AdminSettings from './pages/admin/AdminSettings';
 
 // Individual Service Pages
 import ServiceFTL from './pages/services/ServiceFTL';
@@ -76,14 +89,26 @@ function App() {
               <Route index element={<DashboardHome />} />
               <Route path="loads" element={<FindLoads />} />
               <Route path="post-load" element={<PostLoad />} />
+              <Route path="post-truck" element={<PostTruck />} />
+              <Route path="find-trucks" element={<FindTrucks />} />
               <Route path="my-postings" element={<MyPostings />} />
               <Route path="my-loads" element={<MyLoads />} />
-              <Route path="trucks" element={<VehicleManager />} />
+              <Route path="trucks" element={<MyTruckPostings />} />
+              <Route path="vehicles" element={<VehicleManager />} />
               <Route path="settings" element={<Settings />} />
             </Route>
 
-            {/* Admin Route */}
-            <Route path="/admin" element={<AdminDashboard />} />
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="users" element={<UserManagement />} />
+              <Route path="loads" element={<LoadManagement />} />
+              <Route path="trucks" element={<TruckManagement />} />
+              <Route path="cms" element={<CMSManagement />} />
+              <Route path="settings" element={<AdminSettings />} />
+              <Route path="super-admin" element={<SuperAdminDashboard />} />
+            </Route>
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />

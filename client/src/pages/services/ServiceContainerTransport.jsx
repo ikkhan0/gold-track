@@ -54,7 +54,7 @@ const ServiceContainerTransport = () => {
                 </div>
 
                 <div className="card" style={{ padding: '2rem', marginBottom: '3rem', background: 'rgba(0, 77, 64, 0.1)', border: '1px solid rgba(0, 77, 64, 0.3)' }}>
-                    <h3 style={{ color: 'var(--secondary-green)', fontSize: '1.25rem', marginBottom: '1rem', fontWeight: 700 }}>
+                    <h3 style={{ color: 'var(--primary-gold)', fontSize: '1.25rem', marginBottom: '1rem', fontWeight: 700 }}>
                         Ports We Serve
                     </h3>
                     <ul style={{ color: 'var(--text-body)', lineHeight: 2, listStyle: 'none', paddingLeft: 0 }}>

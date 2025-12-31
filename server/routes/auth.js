@@ -59,7 +59,8 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (await bcrypt.compare(password, user.password))) {
-            if (user.status !== 'approved' && user.role !== 'admin') {
+            // Allow admin and super_admin to login regardless of status
+            if (user.status !== 'approved' && user.role !== 'admin' && user.role !== 'super_admin') {
                 return res.status(403).json({ message: 'Your account is pending approval. Please contact support.' });
             }
 

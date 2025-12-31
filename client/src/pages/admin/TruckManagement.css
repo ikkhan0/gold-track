@@ -1,0 +1,12 @@
+.truck-management {
+    padding: 2rem;
+}
+
+/* Reuse similar styles or add specifics here if needed */
+.truck-badge {
+    background: #e0f7fa;
+    color: #006064;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}

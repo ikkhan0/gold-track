@@ -8,9 +8,7 @@
 
   --primary-gold: #D4AF37;
   --primary-gold-hover: #b5952f;
-
-  --secondary-green: #004D40;
-  --secondary-green-light: #00695c;
+  --secondary-gold: #C9A532;
 
   --text-main: #F5F5F5;
   --text-body: #B0B3B8;
@@ -19,7 +17,7 @@
   --border-gold: #D4AF37;
   --border-subtle: #333333;
 
-  --gradient-hero: linear-gradient(135deg, #004D40 0%, #0F1111 100%);
+  --gradient-hero: linear-gradient(135deg, #D4AF37 0%, #0F1111 100%);
   --gradient-shine: linear-gradient(45deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 60%);
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -30,6 +28,8 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
+
+  /* Force rebuild - GOLD theme active */
 }
 
 * {
@@ -99,7 +99,7 @@ a {
 }
 
 .text-green {
-  color: var(--secondary-green);
+  color: var(--primary-gold);
 }
 
 .text-gray {
@@ -112,6 +112,14 @@ a {
 
 .bg-card {
   background-color: var(--bg-card);
+}
+
+.bg-gold {
+  background-color: var(--primary-gold);
+}
+
+.border-gold {
+  border-color: var(--border-gold);
 }
 
 /* Buttons */
@@ -150,25 +158,27 @@ a {
 }
 
 .btn-primary {
-  background-color: var(--primary-gold);
-  color: var(--text-inverse);
+  background-color: #D4AF37 !important;
+  color: #000000 !important;
   box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-gold-hover);
+  background-color: #C9A532 !important;
   box-shadow: var(--shadow-glow);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background-color: var(--secondary-green);
-  color: white;
-  border: 1px solid var(--secondary-green-light);
+  background: linear-gradient(135deg, #004D40 0%, #003832 100%);
+  color: #F5F5F5;
+  border: 1px solid #004D40;
+  box-shadow: 0 4px 6px rgba(0, 77, 64, 0.3);
 }
 
 .btn-secondary:hover {
-  background-color: var(--secondary-green-light);
+  box-shadow: 0 6px 12px rgba(0, 77, 64, 0.5);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
@@ -755,4 +765,59 @@ input::placeholder {
   .form-row {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ===== FORCE GOLD THEME - Override ALL Green Colors ===== */
+.bg-emerald-600,
+.bg-emerald-500,
+.bg-emerald-50,
+.bg-emerald-100,
+.bg-green-100,
+.bg-green-50,
+.hover\:bg-emerald-500:hover,
+.hover\:bg-emerald-600:hover,
+.hover\:bg-green-50:hover,
+.bg-primary {
+  background-color: rgba(212, 175, 55, 0.1) !important;
+}
+
+.text-emerald-600,
+.text-emerald-400,
+.text-emerald-700,
+.text-emerald-800,
+.text-green-600,
+.text-green-700,
+.text-primary {
+  color: #D4AF37 !important;
+}
+
+.border-emerald-500,
+.border-emerald-50,
+.border-emerald-300,
+.hover\:border-emerald-300:hover,
+.border-primary {
+  border-color: rgba(212, 175, 55, 0.3) !important;
+}
+
+.focus\:ring-emerald-500:focus {
+  --tw-ring-color: rgba(212, 175, 55, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+}
+
+.focus\:ring-gold:focus {
+  --tw-ring-color: rgba(212, 175, 55, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+  outline: none !important;
+}
+
+.group:hover .group-hover\:bg-emerald-100 {
+  background-color: rgba(212, 175, 55, 0.15) !important;
+}
+
+.group:hover .group-hover\:text-emerald-800 {
+  color: #D4AF37 !important;
+}
+
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
 }

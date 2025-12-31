@@ -56,7 +56,7 @@ const MyPostings = () => {
                             <div className="flex flex-col md:flex-row justify-between gap-4">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <span className={`text-xs font-bold px-2 py-1 rounded ${load.status === 'Open' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                                        <span className={`text-xs font-bold px-2 py-1 rounded ${load.status === 'Open' ? 'status-badge status-open' : 'bg-blue-100 text-blue-700'}`}>
                                             {load.status}
                                         </span>
                                         <span className="text-gray-500 text-sm flex items-center gap-1">
@@ -64,7 +64,7 @@ const MyPostings = () => {
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-4 text-lg font-bold text-gray-800 mb-2">
-                                        <span className="flex items-center gap-1"><MapPin size={18} className="text-emerald-600" /> {load.origin}</span>
+                                        <span className="flex items-center gap-1"><MapPin size={18} className="text-gold" /> {load.origin}</span>
                                         <span className="text-gray-400">→</span>
                                         <span className="flex items-center gap-1"><MapPin size={18} className="text-red-600" /> {load.destination}</span>
                                     </div>
@@ -78,7 +78,7 @@ const MyPostings = () => {
                                 <div className="flex flex-col items-end justify-between">
                                     <div className="text-right">
                                         <p className="text-xs text-gray-500">Target Offer</p>
-                                        <p className="font-bold text-emerald-600">{load.offerPrice ? `Rs ${load.offerPrice}` : 'Open'}</p>
+                                        <p className="font-bold text-gold">{load.offerPrice ? `Rs ${load.offerPrice}` : 'Open'}</p>
                                     </div>
                                     <Button variant="outline" className="text-sm mt-3" onClick={() => toggleExpand(load._id)}>
                                         {expandedLoad === load._id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -99,7 +99,7 @@ const MyPostings = () => {
                                                 <div key={bid._id} className="bg-white p-3 rounded border border-gray-200 flex justify-between items-center">
                                                     <div>
                                                         <p className="font-bold text-gray-800">{bid.carrier?.name} <span className="text-xs font-normal text-gray-500">({bid.carrier?.fleetType || 'Carrier'})</span></p>
-                                                        <p className="text-emerald-700 font-bold">Rs {bid.amount.toLocaleString()}</p>
+                                                        <p className="text-gold font-bold">Rs {bid.amount.toLocaleString()}</p>
                                                         {bid.note && <p className="text-xs text-gray-500 italic">"{bid.note}"</p>}
                                                     </div>
                                                     <div className="flex items-center gap-2">
@@ -108,12 +108,12 @@ const MyPostings = () => {
                                                                 <button onClick={() => handleBidAction(load._id, bid._id, 'Rejected')} className="p-2 text-red-600 hover:bg-red-50 rounded" title="Reject">
                                                                     <X size={18} />
                                                                 </button>
-                                                                <button onClick={() => handleBidAction(load._id, bid._id, 'Accepted')} className="p-2 text-green-600 hover:bg-green-50 rounded" title="Accept">
+                                                                <button onClick={() => handleBidAction(load._id, bid._id, 'Accepted')} className="p-2 text-gold hover:bg-gold/10 rounded" title="Accept">
                                                                     <Check size={18} />
                                                                 </button>
                                                             </>
                                                         ) : (
-                                                            <span className={`text-xs font-bold px-2 py-1 rounded ${bid.status === 'Accepted' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                            <span className={`text-xs font-bold px-2 py-1 rounded ${bid.status === 'Accepted' ? 'status-badge status-open' : 'bg-red-100 text-red-700'}`}>
                                                                 {bid.status}
                                                             </span>
                                                         )}

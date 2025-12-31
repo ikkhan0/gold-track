@@ -12,7 +12,7 @@ const VehicleManager = () => {
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [newVehicle, setNewVehicle] = useState({
-        type: 'Shehzore', regNumber: '', capacity: '', driverName: '', driverPhone: ''
+        vehicleType: 'Shehzore', registrationNumber: '', capacity: '', driverName: '', driverPhone: ''
     });
 
     const fetchVehicles = async () => {
@@ -36,7 +36,7 @@ const VehicleManager = () => {
             await api.post('/vehicles', newVehicle);
             fetchVehicles();
             setIsModalOpen(false);
-            setNewVehicle({ type: 'Shehzore', regNumber: '', capacity: '', driverName: '', driverPhone: '' });
+            setNewVehicle({ vehicleType: 'Shehzore', registrationNumber: '', capacity: '', driverName: '', driverPhone: '' });
         } catch (error) {
             alert('Failed to add vehicle');
         }
@@ -59,14 +59,14 @@ const VehicleManager = () => {
                     <Card key={v._id} className="hover:shadow-md transition-shadow">
                         <div className="flex justify-between items-start mb-4">
                             <div className="h-12 w-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600">
-                                <span className="font-bold text-xs">{v.type.substring(0, 3).toUpperCase()}</span>
+                                <span className="font-bold text-xs">{(v.vehicleType || v.type || 'VEH').substring(0, 3).toUpperCase()}</span>
                             </div>
-                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${v.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${v.status === 'Active' ? 'status-badge status-open' : 'bg-orange-100 text-orange-700'}`}>
                                 {v.status}
                             </span>
                         </div>
-                        <h3 className="text-lg font-bold text-gray-800 mb-1">{v.type}</h3>
-                        <p className="text-gray-500 text-sm mb-4">Reg: {v.regNumber}</p>
+                        <h3 className="text-lg font-bold text-gray-800 mb-1">{v.vehicleType || v.type}</h3>
+                        <p className="text-gray-500 text-sm mb-4">Reg: {v.registrationNumber || v.regNumber}</p>
 
                         <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
                             <span className="text-sm font-medium text-gray-600">{v.capacity} Tons</span>
@@ -89,9 +89,9 @@ const VehicleManager = () => {
                         <div>
                             <label className="text-sm font-medium text-gray-700 mb-1 block">Vehicle Type</label>
                             <select
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
-                                value={newVehicle.type}
-                                onChange={(e) => setNewVehicle({ ...newVehicle, type: e.target.value })}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                                value={newVehicle.vehicleType}
+                                onChange={(e) => setNewVehicle({ ...newVehicle, vehicleType: e.target.value })}
                             >
                                 <option>Suzuki Open</option>
                                 <option>Shehzore</option>
@@ -105,8 +105,8 @@ const VehicleManager = () => {
                         <Input
                             label="Reg Number"
                             placeholder="LEC-1234"
-                            value={newVehicle.regNumber}
-                            onChange={(e) => setNewVehicle({ ...newVehicle, regNumber: e.target.value })}
+                            value={newVehicle.registrationNumber}
+                            onChange={(e) => setNewVehicle({ ...newVehicle, registrationNumber: e.target.value })}
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4">

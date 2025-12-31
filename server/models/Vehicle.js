@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 const vehicleSchema = new mongoose.Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 
-    type: {
+    vehicleType: {
         type: String,
         required: true,
-        enum: ['Mazda', 'Shehzore', 'Flatbed', '10-Wheeler', '22-Wheeler', 'Suzuki', 'Container', 'Other']
+        enum: ['Mazda', 'Shehzore', 'Flatbed', '10-Wheeler', '22-Wheeler', 'Suzuki', 'Container', 'Suzuki Open', 'Mazda (Open)', 'Mazda (Container)', 'Other']
     },
 
-    regNumber: { type: String, required: true }, // e.g., LEC-1234
+    registrationNumber: { type: String, required: true }, // e.g., LEC-1234
     capacity: { type: Number }, // In Tons
     driverName: { type: String },
     driverPhone: { type: String },
