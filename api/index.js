@@ -74,6 +74,8 @@ async function connectToDatabase() {
 
     // Clean the URI: remove directConnection parameter if present
     let cleanUri = mongoUri;
+    console.log('📋 Original URI contains directConnection?', mongoUri.includes('directConnection'));
+
     if (mongoUri.includes('directConnection=true')) {
         cleanUri = mongoUri.replace(/[&?]directConnection=true/gi, '');
         console.log('⚠️  Removed directConnection=true from URI');
@@ -83,13 +85,13 @@ async function connectToDatabase() {
         console.log('⚠️  Removed directConnection=false from URI');
     }
 
+    console.log('📋 Cleaned URI contains directConnection?', cleanUri.includes('directConnection'));
     connectionPromise = mongoose.connect(cleanUri, {
         serverSelectionTimeoutMS: CONNECTION_TIMEOUT,
         connectTimeoutMS: CONNECTION_TIMEOUT,
         socketTimeoutMS: 45000,
         maxPoolSize: 10,
         minPoolSize: 1,
-        maxIdleTimeMS: 60000,
         bufferCommands: false,
         autoIndex: false,
     })
@@ -277,3 +279,4 @@ module.exports = async (req, res) => {
         });
     }
 };
+```
