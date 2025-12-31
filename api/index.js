@@ -1,7 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const connectDB = require('./db');
+
+console.log('🚀 API Module Loading - Vercel Serverless');
+
+// Disable buffering for serverless
+mongoose.set('bufferCommands', false);
 
 // Create Express app
 const app = express();
@@ -14,16 +18,81 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Simple database connection wrapper
-async function connectToDatabase() {
-    const jwtSecret = process.env.JWT_SECRET;
+// MongoDB Connection for Serverless
+let isConnected = false;
 
-    if (!jwtSecret) {
-        console.warn('⚠️  JWT_SECRET not set - authentication will fail');
+async function connectToDatabase() {
+    console.log('🔍 connectToDatabase() called');
+    console.log('   Mongoose readyState:', mongoose.connection.readyState);
+    console.log('   isConnected flag:', isConnected);
+
+    // Reuse existing connection
+    if (isConnected && mongoose.connection.readyState === 1) {
+        console.log('✅ Reusing existing MongoDB connection');
+        return mongoose.connection;
     }
 
-    // Use the clean connection module
-    return await connectDB();
+    try {
+        const mongoUri = process.env.MONGO_URI;
+        const jwtSecret = process.env.JWT_SECRET;
+
+        console.log('📋 Environment Variables:');
+        console.log('   MONGO_URI exists:', !!mongoUri);
+        console.log('   JWT_SECRET exists:', !!jwtSecret);
+        console.log('   MONGO_URI length:', mongoUri ? mongoUri.length : 0);
+
+        if (!mongoUri) {
+            throw new Error('MONGO_URI not set in Vercel environment variables');
+        }
+
+        if (!jwtSecret) {
+            console.warn('⚠️  JWT_SECRET missing - auth will fail');
+        }
+
+        // Show sanitized URI
+        const sanitized = mongoUri.replace(/:([^@]+)@/, ':***@');
+        console.log('   Sanitized URI:', sanitized);
+        console.log('   Has directConnection?', mongoUri.includes('directConnection'));
+
+        // CRITICAL: Clean the URI - remove directConnection parameter
+        let cleanUri = mongoUri;
+        if (cleanUri.includes('directConnection')) {
+            const original = cleanUri;
+            cleanUri = cleanUri.replace(/[&?]directConnection=(true|false)/gi, '');
+            console.log('⚠️  REMOVED directConnection from URI');
+            console.log('   Before:', original.replace(/:([^@]+)@/, ':***@'));
+            console.log('   After:', cleanUri.replace(/:([^@]+)@/, ':***@'));
+        }
+
+        console.log('🔌 Calling mongoose.connect()...');
+        console.log('   Final URI:', cleanUri.replace(/:([^@]+)@/, ':***@'));
+
+        // Minimal connection options
+        const options = {
+            serverSelectionTimeoutMS: 30000,
+            socketTimeoutMS: 45000,
+        };
+
+        console.log('   Options:', JSON.stringify(options));
+
+        await mongoose.connect(cleanUri, options);
+
+        isConnected = true;
+        console.log('✅ MongoDB connected successfully!');
+        console.log('   Database:', mongoose.connection.name);
+        console.log('   Host:', mongoose.connection.host);
+        console.log('   ReadyState:', mongoose.connection.readyState);
+
+        return mongoose.connection;
+    } catch (error) {
+        console.error('❌ MongoDB connection FAILED:');
+        console.error('   Error message:', error.message);
+        console.error('   Error name:', error.name);
+        console.error('   Error code:', error.code);
+        console.error('   Full error:', JSON.stringify(error, null, 2));
+        isConnected = false;
+        throw error;
+    }
 }
 
 // Load routes
