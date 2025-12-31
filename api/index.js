@@ -138,7 +138,11 @@ app.use((err, req, res, next) => {
 // Serverless function handler
 module.exports = async (req, res) => {
     try {
-        console.log(`📥 ${req.method} ${req.url}`);
+        // Remove /api prefix from URL for internal routing
+        const originalUrl = req.url;
+        req.url = req.url.replace(/^\/api/, '') || '/';
+        
+        console.log(`📥 ${req.method} ${originalUrl} → ${req.url}`);
         
         // Connect to database
         await connectToDatabase();
