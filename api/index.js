@@ -76,7 +76,6 @@ async function connectToDatabase() {
         serverSelectionTimeoutMS: CONNECTION_TIMEOUT,
         connectTimeoutMS: CONNECTION_TIMEOUT,
         socketTimeoutMS: 45000,
-        family: 4,
         retryWrites: true,
         w: 'majority',
         maxPoolSize: 10,
