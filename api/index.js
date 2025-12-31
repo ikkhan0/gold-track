@@ -72,7 +72,18 @@ async function connectToDatabase() {
     lastConnectionAttempt = now;
     console.log('🔌 Initiating new MongoDB connection...');
 
-    connectionPromise = mongoose.connect(mongoUri, {
+    // Clean the URI: remove directConnection parameter if present
+    let cleanUri = mongoUri;
+    if (mongoUri.includes('directConnection=true')) {
+        cleanUri = mongoUri.replace(/[&?]directConnection=true/gi, '');
+        console.log('⚠️  Removed directConnection=true from URI');
+    }
+    if (mongoUri.includes('directConnection=false')) {
+        cleanUri = mongoUri.replace(/[&?]directConnection=false/gi, '');
+        console.log('⚠️  Removed directConnection=false from URI');
+    }
+
+    connectionPromise = mongoose.connect(cleanUri, {
         directConnection: false, // Explicitly disable directConnection for Atlas
         serverSelectionTimeoutMS: CONNECTION_TIMEOUT,
         connectTimeoutMS: CONNECTION_TIMEOUT,
