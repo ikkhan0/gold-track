@@ -84,17 +84,14 @@ async function connectToDatabase() {
     }
 
     connectionPromise = mongoose.connect(cleanUri, {
-        directConnection: false, // Explicitly disable directConnection for Atlas
         serverSelectionTimeoutMS: CONNECTION_TIMEOUT,
         connectTimeoutMS: CONNECTION_TIMEOUT,
         socketTimeoutMS: 45000,
-        retryWrites: true,
-        w: 'majority',
         maxPoolSize: 10,
         minPoolSize: 1,
         maxIdleTimeMS: 60000,
         bufferCommands: false,
-        autoIndex: false, // Disable auto-indexing in production
+        autoIndex: false,
     })
         .then(async (mongooseInstance) => {
             console.log('🔗 MongoDB connection established');
