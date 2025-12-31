@@ -2,13 +2,6 @@
     "version": 2,
     "builds": [
         {
-            "src": "client/package.json",
-            "use": "@vercel/static-build",
-            "config": {
-                "distDir": "client/dist"
-            }
-        },
-        {
             "src": "api/index.js",
             "use": "@vercel/node"
         }
@@ -16,21 +9,16 @@
     "routes": [
         {
             "src": "/api/(.*)",
-            "dest": "/api/index.js",
-            "headers": {
-                "X-Content-Type-Options": "nosniff",
-                "X-Frame-Options": "DENY",
-                "X-XSS-Protection": "1; mode=block"
-            }
+            "dest": "/api/index.js"
+        },
+        {
+            "handle": "filesystem"
         },
         {
             "src": "/(.*)",
-            "dest": "/client/dist/$1",
-            "headers": {
-                "X-Content-Type-Options": "nosniff",
-                "X-Frame-Options": "DENY",
-                "X-XSS-Protection": "1; mode=block"
-            }
+            "dest": "/client/dist/index.html"
         }
-    ]
+    ],
+    "buildCommand": "cd client && npm install && npm run build",
+    "outputDirectory": "client/dist"
 }
