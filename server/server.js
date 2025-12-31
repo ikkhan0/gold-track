@@ -7,8 +7,21 @@ dotenv.config();
 
 const app = express();
 
+// CORS Configuration - Allow Vercel and localhost
+const corsOptions = {
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'https://gold-track-flax.vercel.app',
+        'https://gold-track.vercel.app',
+        /^https:\/\/gold-track-.*\.vercel\.app$/ // Allow all preview deployments
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Database Connection
