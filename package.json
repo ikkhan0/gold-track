@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "install:all": "npm install && cd client && npm install && cd ../api && npm install && cd ../server && npm install",
     "build": "cd client && npm install && npm run build",
     "start": "cd server && npm start",
     "dev:client": "cd client && npm run dev",

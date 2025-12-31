@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// Use environment variable or default to localhost for development
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Use same domain for API calls (no need for environment variable!)
+// In production: /api → https://gold-track-flax.vercel.app/api
+// In development: /api → proxied to localhost:5000 by Vite
+const API_BASE_URL = '/api';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
