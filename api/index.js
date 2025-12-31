@@ -44,8 +44,11 @@ async function connectToDatabase() {
         }
         
         await mongoose.connect(mongoUri, {
-            serverSelectionTimeoutMS: 5000,
+            serverSelectionTimeoutMS: 10000,
             socketTimeoutMS: 45000,
+            family: 4, // Use IPv4, skip trying IPv6
+            retryWrites: true,
+            w: 'majority'
         });
         
         isConnected = true;
