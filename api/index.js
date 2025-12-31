@@ -152,6 +152,27 @@ app.get('/', (req, res) => {
     });
 });
 
+// Debug route to verify DB queries
+app.get('/debug/db', async (req, res) => {
+    try {
+        const ready = mongoose.connection.readyState;
+        const dbName = mongoose.connection.name;
+        // Lazy-load User model to avoid circular load
+        const User = require('../server/models/User');
+        const count = await User.countDocuments();
+        const oneUser = await User.findOne({}, { email: 1, role: 1, status: 1 }).lean();
+        res.json({
+            readyState: ready,
+            db: dbName,
+            userCount: count,
+            sampleUser: oneUser
+        });
+    } catch (err) {
+        console.error('Debug /debug/db error:', err);
+        res.status(500).json({ message: 'Debug query failed', error: err.message });
+    }
+});
+
 // Error handler
 app.use((err, req, res, next) => {
     console.error('Express Error:', err);
