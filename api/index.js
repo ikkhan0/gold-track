@@ -38,21 +38,42 @@ async function connectToDatabase() {
 
         console.log('Attempting to connect to MongoDB...');
         
-        // Close existing connection if any
-        if (mongoose.connection.readyState !== 0) {
-            await mongoose.connection.close();
+        // Disconnect if connection is in a bad state
+        if (mongoose.connection.readyState !== 0 && mongoose.connection.readyState !== 1) {
+            await mongoose.disconnect();
         }
         
-        await mongoose.connect(mongoUri, {
-            serverSelectionTimeoutMS: 10000,
-            socketTimeoutMS: 45000,
-            family: 4, // Use IPv4, skip trying IPv6
-            retryWrites: true,
-            w: 'majority'
-        });
+        // Only connect if not already connected
+        if (mongoose.connection.readyState === 0) {
+            await mongoose.connect(mongoUri, {
+                serverSelectionTimeoutMS: 5000,
+                connectTimeoutMS: 10000,
+                socketTimeoutMS: 45000,
+                family: 4, // Use IPv4, skip trying IPv6
+                retryWrites: true,
+                w: 'majority',
+                maxPoolSize: 10,
+                minPoolSize: 1
+            });
+        }
+        
+        // Wait for connection to be ready
+        if (mongoose.connection.readyState === 2) { // connecting
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => reject(new Error('Connection timeout')), 10000);
+                mongoose.connection.once('connected', () => {
+                    clearTimeout(timeout);
+                    resolve();
+                });
+                mongoose.connection.once('error', (err) => {
+                    clearTimeout(timeout);
+                    reject(err);
+                });
+            });
+        }
         
         isConnected = true;
-        console.log('✅ MongoDB Connected Successfully');
+        console.log('✅ MongoDB Connected Successfully, readyState:', mongoose.connection.readyState);
     } catch (error) {
         isConnected = false;
         console.error('❌ MongoDB Connection Error:', error.message);
