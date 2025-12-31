@@ -73,6 +73,7 @@ async function connectToDatabase() {
     console.log('🔌 Initiating new MongoDB connection...');
 
     connectionPromise = mongoose.connect(mongoUri, {
+        directConnection: false, // Explicitly disable directConnection for Atlas
         serverSelectionTimeoutMS: CONNECTION_TIMEOUT,
         connectTimeoutMS: CONNECTION_TIMEOUT,
         socketTimeoutMS: 45000,
