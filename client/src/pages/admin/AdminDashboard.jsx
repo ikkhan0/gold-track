@@ -38,7 +38,7 @@ const AdminDashboard = () => {
     const fetchPendingUsers = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await axios.get('http://localhost:5000/api/admin/users?status=pending', {
+            const res = await axios.get('/api/admin/users?status=pending', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPendingUsers(Array.isArray(res.data) ? res.data : []);
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const usersRes = await axios.get('http://localhost:5000/api/admin/users', {
+            const usersRes = await axios.get('/api/admin/users', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setStats({
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
     const handleAction = async (userId, status) => {
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.put(`http://localhost:5000/api/admin/users/${userId}/status`,
+            await axios.put(`/api/admin/users/${userId}/status`,
                 { status },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

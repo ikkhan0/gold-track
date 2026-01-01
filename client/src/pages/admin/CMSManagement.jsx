@@ -16,7 +16,7 @@ const CMSManagement = () => {
     const fetchContent = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await axios.get('http://localhost:5000/api/admin/cms', {
+            const response = await axios.get('/api/admin/cms', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setContents(response.data);
@@ -47,7 +47,7 @@ const CMSManagement = () => {
     const handleSave = async (key) => {
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.put(`http://localhost:5000/api/admin/cms/${key}`, formData, {
+            await axios.put(`/api/admin/cms/${key}`, formData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setEditingId(null);

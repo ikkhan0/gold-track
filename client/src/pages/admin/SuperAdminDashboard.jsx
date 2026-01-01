@@ -31,7 +31,7 @@ const SuperAdminDashboard = () => {
     const fetchStats = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const usersRes = await axios.get('http://localhost:5000/api/admin/users', {
+            const usersRes = await axios.get('/api/admin/users', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 

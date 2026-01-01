@@ -29,7 +29,7 @@ const UserManagement = () => {
             if (filters.status) params.append('status', filters.status);
             if (filters.search) params.append('search', filters.search);
 
-            const response = await axios.get(`http://localhost:5000/api/admin/users?${params}`, {
+            const response = await axios.get(`/api/admin/users?${params}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUsers(response.data.users || []);
@@ -66,7 +66,7 @@ const UserManagement = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.put(`http://localhost:5000/api/admin/users/${selectedUser._id}`, editForm, {
+            await axios.put(`/api/admin/users/${selectedUser._id}`, editForm, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert('User updated successfully!');
@@ -81,7 +81,7 @@ const UserManagement = () => {
         if (!window.confirm('Approve this user?')) return;
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.put(`http://localhost:5000/api/admin/users/${userId}/approve`, {}, {
+            await axios.put(`/api/admin/users/${userId}/approve`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchUsers();
@@ -95,7 +95,7 @@ const UserManagement = () => {
         if (!window.confirm('Reject this user?')) return;
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.put(`http://localhost:5000/api/admin/users/${userId}/reject`, {}, {
+            await axios.put(`/api/admin/users/${userId}/reject`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchUsers();
@@ -109,7 +109,7 @@ const UserManagement = () => {
         if (!window.confirm('Suspend this user?')) return;
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.put(`http://localhost:5000/api/admin/users/${userId}/suspend`, {}, {
+            await axios.put(`/api/admin/users/${userId}/suspend`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchUsers();

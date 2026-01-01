@@ -18,7 +18,7 @@ const LoadManagement = () => {
     const fetchLoads = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await axios.get(`http://localhost:5000/api/admin/loads?page=${page}`, {
+            const response = await axios.get(`/api/admin/loads?page=${page}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setLoads(response.data.loads || []);
@@ -34,7 +34,7 @@ const LoadManagement = () => {
         if (!confirm('Are you sure you want to delete this load? This cannot be undone.')) return;
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.delete(`http://localhost:5000/api/admin/loads/${id}`, {
+            await axios.delete(`/api/admin/loads/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchLoads(); // Refresh list

@@ -17,7 +17,7 @@ const TruckManagement = () => {
     const fetchTrucks = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await axios.get(`http://localhost:5000/api/admin/trucks?page=${page}`, {
+            const response = await axios.get(`/api/admin/trucks?page=${page}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setTrucks(response.data.trucks || []);
@@ -33,7 +33,7 @@ const TruckManagement = () => {
         if (!confirm('Are you sure you want to delete this truck posting?')) return;
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.delete(`http://localhost:5000/api/admin/trucks/${id}`, {
+            await axios.delete(`/api/admin/trucks/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchTrucks();

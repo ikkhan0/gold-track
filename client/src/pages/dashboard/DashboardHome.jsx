@@ -53,7 +53,7 @@ const DashboardHome = () => {
                 return;
             }
 
-            const res = await axios.get('http://localhost:5000/api/dashboard/stats', {
+            const res = await axios.get('/api/dashboard/stats', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
