@@ -24,10 +24,39 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Database Connection
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ MongoDB Connected Successfully'))
-    .catch((err) => console.error('❌ MongoDB Connection Error:', err));
+// Disable buffering for serverless
+mongoose.set('bufferCommands', false);
+
+// MongoDB Connection with Caching for Serverless
+let isConnected = false;
+
+const connectToDatabase = async () => {
+    if (isConnected && mongoose.connection.readyState === 1) {
+        console.log('✅ Reusing existing MongoDB connection');
+        return;
+    }
+
+    try {
+        if (!process.env.MONGO_URI) {
+            throw new Error('MONGO_URI not defined in environment variables');
+        }
+
+        console.log('🔌 Connecting to MongoDB...');
+
+        await mongoose.connect(process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+        });
+
+        isConnected = true;
+        console.log('✅ MongoDB Connected Successfully');
+        console.log('   Database:', mongoose.connection.name);
+    } catch (err) {
+        console.error('❌ MongoDB Connection Error:', err.message);
+        isConnected = false;
+        throw err;
+    }
+};
 
 // Routes (Placeholders)
 app.get('/', (req, res) => {
@@ -125,6 +154,9 @@ app.get('/api/health', (req, res) => {
         }
     });
 });
+
+// Export connectDB function for serverless wrapper
+app.set('connectDB', connectToDatabase);
 
 // Export app for Vercel
 module.exports = app;
