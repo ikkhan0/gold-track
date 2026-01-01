@@ -33,15 +33,26 @@ async function connectToDatabase() {
     }
 
     try {
+        // EXTENSIVE DEBUGGING - Check all env vars
+        console.log('🔍 FULL ENVIRONMENT CHECK:');
+        console.log('   All env keys:', Object.keys(process.env).filter(k => !k.startsWith('npm_')).slice(0, 20));
+        console.log('   NODE_ENV:', process.env.NODE_ENV);
+        console.log('   VERCEL:', process.env.VERCEL);
+        console.log('   VERCEL_ENV:', process.env.VERCEL_ENV);
+
         const mongoUri = process.env.MONGO_URI;
         const jwtSecret = process.env.JWT_SECRET;
 
-        console.log('📋 Environment Variables:');
+        console.log('📋 Target Environment Variables:');
         console.log('   MONGO_URI exists:', !!mongoUri);
-        console.log('   JWT_SECRET exists:', !!jwtSecret);
+        console.log('   MONGO_URI type:', typeof mongoUri);
         console.log('   MONGO_URI length:', mongoUri ? mongoUri.length : 0);
+        console.log('   MONGO_URI first 30 chars:', mongoUri ? mongoUri.substring(0, 30) : 'undefined');
+        console.log('   JWT_SECRET exists:', !!jwtSecret);
 
         if (!mongoUri) {
+            console.error('❌ MONGO_URI is not defined!');
+            console.error('   This means Vercel environment variables are NOT being loaded');
             throw new Error('MONGO_URI not set in Vercel environment variables');
         }
 
